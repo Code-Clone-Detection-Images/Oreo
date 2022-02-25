@@ -5,7 +5,7 @@ RUN addgroup --gid 1000 oreo-user && adduser --uid 1000 --ingroup oreo-user --ho
 
 RUN apk add --update --no-cache bash tar wget python3 hdf5-dev gcc openblas-dev
 RUN python3 -m ensurepip
-# somewho the predictor depends on it
+# somehow the predictor depends on it
 RUN ln -s /usr/bin/python3 /usr/bin/python && ln -s /usr/bin/pip3 /usr/bin/pip
 RUN /usr/bin/python3 -m pip install --upgrade pip wheel
 # ANT
