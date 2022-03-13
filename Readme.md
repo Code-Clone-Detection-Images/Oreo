@@ -1,6 +1,6 @@
 # Oreo
 
-Note, that oreo is licensed under the [GNU General Public License v3.0](https://github.com/Mondego/oreo/blob/master/LICENSE).
+Note, that Oreo is licensed under the [GNU General Public License v3.0](https://github.com/Mondego/oreo/blob/master/LICENSE).
 
 Run [Oreo](https://github.com/Mondego/oreo) on a supplied folder.
 
