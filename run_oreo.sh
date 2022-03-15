@@ -4,12 +4,24 @@ cd "$HOME/oreo/java-parser"
 echo "Step 1: setup metric"
 
 
-sed -i "s|BufferedReader br;|BufferedReader br;System.out.println(\"X-OUTPUT:\" + filename);|" "$HOME/oreo/java-parser/src/uci/mondego/JavaMetricParser.java"
+# sed -i "s|BufferedReader br;|BufferedReader br;System.out.println(\"X-OUTPUT:\" + filename);|" "$HOME/oreo/java-parser/src/uci/mondego/JavaMetricParser.java"
 
-sed -i "s|String line = null;|String line = null;System.out.println(\"OUTPUT:\" + filename);|" "$HOME/oreo/java-parser/src/uci/mondego/JavaMetricParser.java"
+# sed -i "s|String line = null;|String line = null;System.out.println(\"OUTPUT:\" + filename);|" "$HOME/oreo/java-parser/src/uci/mondego/JavaMetricParser.java"
 
 # debugging bugs
-sed -i "s|new File(dirName);|new File(dirName); System.out.println(dirName)|" "$HOME/oreo/java-parser/src/uci/mondego/DirExplorer.java"
+sed -i "s|File dir|System.out.println(\"checking:\" + dirName);File dir|" "$HOME/oreo/java-parser/src/uci/mondego/DirExplorer.java"
+sed -i "s|for (File file |if(dir.listFiles() == null) return results; for (File file |" "$HOME/oreo/java-parser/src/uci/mondego/DirExplorer.java"
+sed -i "s|results.add(file);|results.add(file); System.out.println(\"Added: \"+ file);|" "$HOME/oreo/java-parser/src/uci/mondego/DirExplorer.java"
+sed -i "s|finder(file.getName())|finder(file.getAbsolutePath())|" "$HOME/oreo/java-parser/src/uci/mondego/DirExplorer.java"
+
+sed -i "s|FileWriters.metricsFileWriter|System.out.println(\"writing \" + line);FileWriters.metricsFileWriter|" "$HOME/oreo/java-parser/src/uci/mondego/CustomVisitor.java"
+sed -i "s|FileWriters.metricsFileWriter =|System.out.println(\"Writing To: \" + (this.outputDirPath + File.separator + this.metricsFileName)); FileWriters.metricsFileWriter =|" "$HOME/oreo/java-parser/src/uci/mondego/JavaMetricParser.java"
+
+
+sed -i "s|visitor.visitPreOrder(cu)|System.out.println(\"Visiting done.\"); visitor.visitPreOrder(cu)|" "$HOME/oreo/java-parser/src/uci/mondego/FolderInputProcessor.java"
+
+
+
 
 # cat "$HOME/oreo/java-parser/src/uci/mondego/JavaMetricParser.java"
 
@@ -30,8 +42,7 @@ sed -i 's|, "w")|, "w", encoding="utf8")|' metricCalculationWorkManager.py
 python3 metricCalculationWorkManager.py 1 d "$1"
 
 counter=0
-# COUNTER_MAX=20
-COUNTER_MAX=5
+COUNTER_MAX=20
 DIR=./1_metric_output
 
 # concurrent <3
@@ -43,6 +54,9 @@ done
 
 cat metric.out metric.err
 
+echo "[Dummy wait for population]"
+sleep 40 # we do wait a little bit to ensure the files are populated
+
 if [ ! -d "$DIR" ]; then
    echo "[Error] no '$DIR' output found. Exiting."
    exit 1
@@ -53,7 +67,8 @@ echo "     3.1: file for clone-detector"
 # note: the tutorial says to move to 'oreo/input/dataset' but this is wrong :)
 TARGET=../clone-detector/input/dataset
 cp "$DIR/mlcc_input.file" "$TARGET/blocks.file"
-cat "$TARGET/blocks.file"
+echo "Blocks file:"
+cat "$DIR/mlcc_input.file"
 
 echo "Step 4: Running Oreo"
 cd "$HOME/oreo/clone-detector"
@@ -70,10 +85,11 @@ sed -i "s|os.path.join(os.path.dirname(__file__), '../results/predictions/')|'$O
 # debug
 # sed -i "s|self.loadModel()|print(\"loading model\");self.loadModel()|" Predictor.py
 # sed -i "s|# load model|print(\"STARTING PREDICTOR\");|" Predictor.py
-sed -i "s|python Predictor.py \$i > out_\$i &|python Predictor.py \$i|" runPredictor.sh
+# sed -i "s|python Predictor.py \$i > out_\$i &|python Predictor.py \$i|" runPredictor.sh
 
 counter=0
-COUNTER_MAX=100
+# COUNTER_MAX=100
+COUNTER_MAX=10
 
 # concurrent <3
 FOLDER_SIZE=0
@@ -87,7 +103,8 @@ done
 ./runPredictor.sh
 
 counter=0
-COUNTER_MAX=100
+# COUNTER_MAX=100
+COUNTER_MAX=10
 
 # concurrent <3
 FOLDER_SIZE=0
@@ -103,6 +120,9 @@ done
 
 echo "Candidates Dir:"
 ls "$CANDIDATES_DIR"
+
 echo "Output Dir:"
-ls -l "$OUTPUT_DIR"
-cat "$OUTPUT_DIR"/*
+for file in $(ls "$OUTPUT_DIR"); do
+   echo "$file ======================"
+   cat $file
+done
