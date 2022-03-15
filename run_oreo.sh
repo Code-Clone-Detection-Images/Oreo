@@ -88,7 +88,7 @@ sed -i "s|os.path.join(os.path.dirname(__file__), '../results/predictions/')|'$O
 # sed -i "s|python Predictor.py \$i > out_\$i &|python Predictor.py \$i|" runPredictor.sh
 
 counter=0
-COUNTER_MAX=100
+COUNTER_MAX=10
 
 # concurrent <3
 FOLDER_SIZE=0
