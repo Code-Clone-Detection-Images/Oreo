@@ -35,8 +35,6 @@ RUN rm -f oreo.tar.gz
 # this model is needed for oreo to have something for its prediction
 # it is part of the artifact build, which is nice, but this allows it to change
 # more easily
-ENV TRAINED_MODEL=oreo_model_fse.h5
-COPY "$TRAINED_MODEL" "$HOME/"
 
 ENV CANDIDATES_DIR="$HOME/oreo/results/candidates"
 ENV OUTPUT_DIR="$HOME/oreo/results/predictions"

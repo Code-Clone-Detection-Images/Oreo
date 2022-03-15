@@ -1,6 +1,7 @@
 c-small/
 c-large/
 java-small/
+java-other/
 java-large/
 output.txt
 # Created by https://www.toptal.com/developers/gitignore/api/linux,java,perl,ocaml,visualstudiocode,macos,windows
