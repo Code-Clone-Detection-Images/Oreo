@@ -124,5 +124,5 @@ ls "$CANDIDATES_DIR"
 echo "Output Dir:"
 for file in $(ls "$OUTPUT_DIR"); do
    echo "$file ======================"
-   cat $file
+   cat "$OUTPUT_DIR/$file"
 done
