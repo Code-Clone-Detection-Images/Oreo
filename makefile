@@ -3,7 +3,7 @@
 NAME:=alpine-oreo
 
 #  --no-cache
-build: Dockerfile oreo-FSE_Artifact.tar.gz
+build: Dockerfile oreo.tar.gz
 	docker build --tag "$(NAME)" --file Dockerfile .
 
 # https://docs.docker.com/engine/reference/commandline/save/

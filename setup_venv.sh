@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
 echo " - update configuration"
-cd "$HOME/oreo-FSE_Artifact/clone-detector"
+cd "$HOME/oreo/clone-detector"
 sed -i "s|CANDIDATES_DIR=.*|CANDIDATES_DIR=$CANDIDATES_DIR|" sourcerer-cc.properties
 
 # we have to replace this similar in the predictor
-cd "$HOME/oreo-FSE_Artifact/python_scripts"
+cd "$HOME/oreo/python_scripts"
+
+mkdir -p "$OUTPUT_DIR"
+mkdir -p "$CANDIDATES_DIR"
 
 # setting self.output_dir; we do this in case it differs
 sed -i "s|'../results/candidates/'|'$CANDIDATES_DIR'|" Predictor.py
@@ -17,7 +20,7 @@ sed -i "s|'../results/predictions/'|'$OUTPUT_DIR'|" Predictor.py
 sed -i "s|'../ml_model/oreo_model_fse.h5'|'$HOME/$TRAINED_MODEL'|" Predictor.py
 
 # TODO: find out which of this to move to docker (most of it should be there)
-echo " -doing venv"
+echo " - doing venv"
 python3 -m venv ./venv
 source ./venv/bin/activate
 cd dependencies/

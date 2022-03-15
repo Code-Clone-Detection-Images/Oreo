@@ -27,10 +27,10 @@ ENV PATH="${PATH}:${ANT_HOME}/bin"
 
 USER oreo-user
 WORKDIR "$HOME"
-COPY ./oreo-FSE_Artifact.tar.gz "$HOME"
+COPY ./oreo.tar.gz "$HOME"
 
-RUN tar -xzvf oreo-FSE_Artifact.tar.gz
-RUN rm -f oreo-FSE_Artifact.tar.gz
+RUN tar -xzvf oreo.tar.gz
+RUN rm -f oreo.tar.gz
 
 # this model is needed for oreo to have something for its prediction
 # it is part of the artifact build, which is nice, but this allows it to change
@@ -38,8 +38,8 @@ RUN rm -f oreo-FSE_Artifact.tar.gz
 ENV TRAINED_MODEL=oreo_model_fse.h5
 COPY "$TRAINED_MODEL" "$HOME/"
 
-ENV CANDIDATES_DIR="$HOME/oreo-FSE_Artifact/results/candidates"
-ENV OUTPUT_DIR="$HOME/oreo-FSE_Artifact/results/predictions/"
+ENV CANDIDATES_DIR="$HOME/oreo/results/candidates"
+ENV OUTPUT_DIR="$HOME/oreo/results/predictions"
 COPY setup_venv.sh /
 RUN bash /setup_venv.sh
 
